@@ -18,7 +18,7 @@ set FLASK_APP=first_backend.py
 set FLASK_ENV=development
 ```
 
-And finally, to load up the website:
+To launch the backend:
 ```
 flask run
 (or alternatively, the below command works too)
