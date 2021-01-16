@@ -3,6 +3,9 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 
+import string
+import random
+
 
 app = Flask(__name__)
 CORS(app)
@@ -69,10 +72,19 @@ def get_users():
     
     elif request.method == 'POST':
         userToAdd = request.get_json()
+
+        # Generates a random ID and adds the 'id' field to a user POST request (6.2)
+        idToAdd = generate_id()
+        userToAdd['id'] = idToAdd
+
         users['users_list'].append(userToAdd)
-        resp = jsonify(success=True)
-        # 200 = default code for a normal/OK POST
-        resp.status_code = 200
+
+        # Updated representation of 'user' is sent to the frontend (6.3)
+        resp = jsonify(user=userToAdd, success=True)
+
+        # 201 = default code for a normal/OK POST
+        # Code changed from 200 to 201 (6.1)
+        resp.status_code = 201
         return resp
 
     elif request.method == 'DELETE':
@@ -90,6 +102,20 @@ def get_users():
         # 404 = when the user does not exist (Not Found)
         resp.status_code = 404
         return resp
+
+
+# random ID generator function (6.2)
+def generate_id():
+    id = ""
+
+    for i in range(3):
+        id += random.choice(string.ascii_lowercase)
+
+    for i in range(3):
+        id += random.choice(string.digits)
+
+    return id
+
 
 @app.route('/users/<id>')
 def get_user(id):
