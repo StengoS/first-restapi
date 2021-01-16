@@ -6,11 +6,29 @@ import axios from 'axios'
 function MyApp() {
    const [characters, setCharacters] = useState([]);
 
-   function removeOneCharacter(index) {
+   function removeOneCharacter(index) {    
+       var charDelete;
        const updated = characters.filter((character, i) => {
-           return i !== index
+           if (i === index)
+               charDelete = character;
+
+           return i !== index;
        });
+
+       makeDeleteCall(charDelete);
        setCharacters(updated);
+   }
+
+   // Called in removeOneCharacter() to send DELETE request to backend (6.4)
+   async function makeDeleteCall(character) {
+       try {
+           const response = await axios.delete('http://localhost:5000/users', {data: {character}});
+           return response;
+       }
+       catch (error) {
+           console.log(error);
+           return false;
+       }
    }
 
    function updateList(person) {

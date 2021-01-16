@@ -88,10 +88,11 @@ def get_users():
         return resp
 
     elif request.method == 'DELETE':
+        # Modified to support communication from frontend (6.4)
         userToDelete = request.get_json()
         
         for user in users['users_list']:
-            if user['id'] == userToDelete['id']:
+            if user['id'] == userToDelete['character']['id']:
                 users['users_list'].remove(user)
                 resp = jsonify(success=True)
                 # 204 = default code for a normal/OK DELETE
@@ -104,7 +105,7 @@ def get_users():
         return resp
 
 
-# random ID generator function (6.2)
+# random ID generator function (6.2) 
 def generate_id():
     id = ""
 
